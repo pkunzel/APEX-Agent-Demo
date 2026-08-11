@@ -1,0 +1,298 @@
+page 2 (
+    name: System Augmented Prompt
+    alias: SYSTEM-AUGMENTED-PROMPT
+    title: System Augmented Prompt
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region breadcrumb (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region new (
+        name: Select a customer and ask a question
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
+        }
+    )
+
+    region validate (
+        name: Available data for selected customer
+        type: classicReport
+        source {
+            location: localDatabase
+            tableName: AGENT_CUSTOMERS
+            whereClause: ID = :P2_CUSTOMER_ID
+            pageItemsToSubmit: P2_CUSTOMER_ID
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
+        }
+        componentAppearance {
+            template: @/value-attribute-pairs-column
+            templateOptions: [
+                #DEFAULT#
+                t-AVPList--leftAligned
+            ]
+        }
+
+        column CITY (
+            reportColumnQueryId: 5
+            derivedColumn: N
+            heading {
+                heading: City
+            }
+            layout {
+                sequence: 50
+            }
+        )
+
+        column COUNTRY (
+            reportColumnQueryId: 6
+            derivedColumn: N
+            heading {
+                heading: Country
+            }
+            layout {
+                sequence: 60
+            }
+        )
+
+        column CREATED_AT (
+            reportColumnQueryId: 11
+            derivedColumn: N
+            heading {
+                heading: Created At
+            }
+            layout {
+                sequence: 110
+            }
+        )
+
+        column DATE_OF_BIRTH (
+            reportColumnQueryId: 8
+            derivedColumn: N
+            heading {
+                heading: Date Of Birth
+            }
+            layout {
+                sequence: 80
+            }
+        )
+
+        column EMAIL (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Email
+            }
+            layout {
+                sequence: 40
+            }
+        )
+
+        column FIRST_NAME (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: First Name
+            }
+            layout {
+                sequence: 20
+            }
+        )
+
+        column GENDER (
+            reportColumnQueryId: 7
+            derivedColumn: N
+            heading {
+                heading: Gender
+            }
+            layout {
+                sequence: 70
+            }
+        )
+
+        column ID (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            type: hidden
+            layout {
+                sequence: 10
+            }
+        )
+
+        column LAST_NAME (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Last Name
+            }
+            layout {
+                sequence: 30
+            }
+        )
+
+        column PHONE (
+            reportColumnQueryId: 9
+            derivedColumn: N
+            heading {
+                heading: Phone
+            }
+            layout {
+                sequence: 90
+            }
+        )
+
+        column POSTAL_CODE (
+            reportColumnQueryId: 10
+            derivedColumn: N
+            heading {
+                heading: Postal Code
+            }
+            layout {
+                sequence: 100
+            }
+        )
+
+    )
+
+    pageItem P2_CUSTOMER_ID (
+        type: popupLov
+        label {
+            label: Customers
+            alignment: left
+        }
+        lov {
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ac.first_name || ' ' || ac.last_name as full_name
+                     , ac.id
+                  from agent_customers ac
+                ```
+        }
+        layout {
+            sequence: 10
+            region: @new
+            slot: regionBody
+            alignment: left
+            columnSpan: 4
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+            width: 30
+        }
+    )
+
+    button new (
+        buttonName: CHABOT
+        label: Chabot
+        layout {
+            sequence: 20
+            region: @new
+            slot: regionBody
+            startNewRow: false
+            columnSpan: 1
+        }
+        appearance {
+            buttonTemplate: @/icon
+            templateOptions: [
+                #DEFAULT#
+                t-Button--large
+                t-Button--primary
+                t-Button--hoverIconPush
+                t-Button--stretch
+                t-Button--gapTop
+            ]
+            icon: fa-chatbot
+        }
+        behavior {
+            action: triggerAction
+        }
+
+        triggerAction native-open-ai-assistant (
+            action: showAiAssistant
+            genAI {
+                agent: @1-customer-data-rag
+                itemsToSubmit: P2_CUSTOMER_ID
+            }
+            execution {
+                sequence: 10
+            }
+        )
+
+    )
+
+    dynamicAction update-report (
+        name: Update Report
+        execution {
+            sequence: 10
+        }
+        when {
+            selectionType: items
+            items: P2_CUSTOMER_ID
+        }
+
+        action native-refresh (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @validate
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+    )
+
+)
+

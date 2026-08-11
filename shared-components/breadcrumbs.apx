@@ -1,0 +1,70 @@
+breadcrumb breadcrumb (
+    name: Breadcrumb
+
+    entry agent-with-1-tool (
+        name: Agent with 1 Tool
+        pageNumber: 3
+        execution {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 3
+            }
+        }
+    )
+
+    entry agent-with-client-and-server-siide (
+        name: Agent with Client and Server Siide
+        pageNumber: 4
+        execution {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 4
+            }
+        }
+    )
+
+    entry home (
+        name: Home
+        pageNumber: 1
+        execution {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 1
+            }
+        }
+    )
+
+    entry multi-agent-process (
+        name: Multi Agent Process
+        pageNumber: 5
+        execution {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 5
+            }
+        }
+    )
+
+    entry system-augmented-prompt (
+        name: System Augmented Prompt
+        pageNumber: 2
+        execution {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 2
+            }
+        }
+    )
+
+)
+

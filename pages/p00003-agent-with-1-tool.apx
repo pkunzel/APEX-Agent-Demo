@@ -1,0 +1,121 @@
+page 3 (
+    name: Agent with 1 Tool
+    alias: AGENT-WITH-1-TOOL
+    title: Agent with 1 Tool
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region breadcrumb (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region conversation (
+        name: Conversation
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
+        }
+        advanced {
+            htmlDomId: region-chabot
+        }
+    )
+
+    button new (
+        buttonName: CHATBOT
+        label: Chatbot
+        layout {
+            sequence: 10
+            region: @conversation
+            slot: edit
+        }
+        appearance {
+            buttonTemplate: @/icon
+            templateOptions: #DEFAULT#
+            icon: fa-chatbot
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+
+    dynamicAction new (
+        name: Open Chatbot
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @new
+        }
+
+        action native-open-ai-assistant (
+            action: showAiAssistant
+            genAI {
+                agent: @2-customer-data-agent
+            }
+            appearance {
+                displayAs: inline
+                containerSelector: #region-chabot
+            }
+            execution {
+                sequence: 10
+            }
+            advanced {
+                initJavaScriptFunction:
+                    ```javascript-browser
+                     function( options ) {
+                        window.chatModel?.destroy()
+                        window.chatView?.destroy()
+                        
+                        options.useChatContext = ( chatModel, chatView ) => {
+                            window.chatModel = chatModel;
+                            window.chatView = chatView;
+                        };
+                    
+                        return options;
+                    }
+                    ```
+            }
+        )
+
+    )
+
+)
+

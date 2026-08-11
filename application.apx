@@ -1,0 +1,64 @@
+app FULL-AGENT-APP (
+    name: Full Agent App
+    genAI {
+        service: @open_ai
+    }
+    logo {
+        type: text
+        text: Full Agent App
+    }
+    navigation {
+        homeUrl: {
+            page: 1
+        }
+        loginUrl: {
+            page: LOGIN
+        }
+    }
+    navigationMenu {
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            t-TreeNav--styleA
+            js-navCollapsed--hidden
+        ]
+        list: @navigation-menu
+    }
+    navigationBar {
+        list: @navigation-bar
+        listTemplate: @/navigation-bar
+        templateOptions: #DEFAULT#
+    }
+    userInterface {
+        currentTheme: @universal-theme
+        globalPage: 0
+        addBuiltWithApexToFooter: false
+    }
+    appFormatMasks {
+        date: DS
+        timestamp: DS
+        timestampTimeZone: DS
+    }
+    authentication {
+        scheme: @oracle-apex-accounts
+    }
+    sessionStateProtection {
+        checksumSalt: 646BF803271C929CE511295042DCD274195888BEF480B0BF7687C54DC22E65E7
+    }
+    progressiveWebApp {
+        installable: true
+        enablePushNotifications: true
+        pushNotificationsCredentials: @app-117-push-notifications-credentials
+    }
+    runtime {
+        allowFeedback: true
+    }
+
+    substitution APP_NAME (
+        value {
+            staticValue: Full Agent App
+        }
+    )
+
+)
+
