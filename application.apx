@@ -1,11 +1,11 @@
-app FULL-AGENT-APP (
-    name: Full Agent App
+app APEX-AGENTS (
+    name: APEX Agents
     genAI {
         service: @open_ai
     }
     logo {
         type: text
-        text: Full Agent App
+        text: APEX Agents
     }
     navigation {
         homeUrl: {
@@ -56,7 +56,7 @@ app FULL-AGENT-APP (
 
     substitution APP_NAME (
         value {
-            staticValue: Full Agent App
+            staticValue: APEX Agents
         }
     )
 

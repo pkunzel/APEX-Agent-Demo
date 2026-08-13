@@ -62,9 +62,18 @@ aiAgent 1-customer-data-rag (
             dataDescription: Data for a given customer
             sqlQuery:
                 ```sql
-                select *
-                from AGENT_CUSTOMERS
-                where ID = :P2_CUSTOMER_ID
+                select first_name,
+                       last_name,
+                       gender,
+                       city,
+                       country,
+                       date_of_birth,
+                       email,
+                       phone,
+                       postal_code,
+                       created_at
+                  from agent_customers
+                 where id = :P2_CUSTOMER_ID
                 ```
         }
     )

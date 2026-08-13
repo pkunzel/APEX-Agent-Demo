@@ -1,0 +1,278 @@
+page 4 (
+    name: Agent with Client and Server Side
+    alias: AGENT-WITH-CLIENT-AND-SERVER-SIDE
+    title: Agent with Client and Server Side
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+        warnOnUnsavedChanges: false
+    }
+    javaScript {
+        functionAndGlobalVariableDeclaration:
+            ```javascript-browser
+            function refreshMap(geoLocationString) {
+            
+                // Set APEX item
+                apex.item("P4_COORDINATES").setValue(geoLocationString);
+            
+                // Parse coordinates
+                const coords = JSON.parse(geoLocationString);
+            
+                // Get APEX Map region
+                const mapRegion = apex.region("weather_map");
+            
+                // Get underlying MapLibre map
+                const map = mapRegion.getMapObject();
+            
+                // Smoothly fly to location
+                map.flyTo({
+                    center: [
+                        coords.longitude,
+                        coords.latitude
+                    ],
+                    zoom: 12,
+                    duration: 2500,
+                    essential: true
+                });
+            }
+            ```
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region breadcrumb (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region new (
+        name: Map
+        type: map
+        layout {
+            sequence: 60
+            slot: body
+            startNewRow: false
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
+        }
+        advanced {
+            htmlDomId: weather_map
+        }
+        controls {
+            options: [
+                scaleBar
+                infiniteMap
+                rectangleZoom
+            ]
+        }
+        attributes {
+            messagesPosition: below
+        }
+
+        layer new (
+            name: Coordinates
+            layout {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select jt.*
+                    from json_table(
+                        :P4_COORDINATES,
+                        '$'
+                        columns (
+                            latitude  number path '$.latitude',
+                            longitude number path '$.longitude',
+                            accuracy  number path '$.accuracy'
+                        )
+                    ) jt;
+                    ```
+                pageItemsToSubmit: P4_COORDINATES
+            }
+            columnMapping {
+                geometryColumnDataType: longitudeLatitude
+                longitudeColumn: LONGITUDE
+                latitudeColumn: LATITUDE
+            }
+        )
+
+    )
+
+    region weather-forecast (
+        name: Weather Forecast
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--scrollBody
+            ]
+        }
+    )
+
+    pageItem P4_COORDINATES (
+        type: textField
+        label {
+            label: New
+            alignment: left
+        }
+        layout {
+            sequence: 30
+            region: @weather-forecast
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+            width: 30
+        }
+    )
+
+    pageItem P4_WEATHER (
+        type: markdownEditor
+        label {
+            label: Weather
+            alignment: left
+        }
+        layout {
+            sequence: 40
+            region: @weather-forecast
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    button clear (
+        buttonName: CLEAR
+        label: Clear
+        layout {
+            sequence: 10
+            region: @weather-forecast
+            slot: edit
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            warnOnUnsavedChanges: doNotCheck
+        }
+    )
+
+    button get-weather-forecast (
+        buttonName: GET_WEATHER_FORECAST
+        label: Get Weather Forecast
+        layout {
+            sequence: 20
+            region: @weather-forecast
+            slot: edit
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: triggerAction
+        }
+
+        triggerAction native-generate-text-ai (
+            action: generateTextWithAi
+            genAI {
+                agent: @weather-forecast-agent
+            }
+            inputValue {
+                type: onlySystemPrompt
+            }
+            useResponse {
+                item: P4_WEATHER
+            }
+            execution {
+                sequence: 10
+            }
+        )
+
+    )
+
+    dynamicAction update-map (
+        name: Update Map
+        execution {
+            sequence: 10
+        }
+        when {
+            selectionType: items
+            items: P4_COORDINATES
+        }
+        clientSideCondition {
+            type: itemIsNotNull
+            item: P4_COORDINATES
+        }
+
+        action native-refresh (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @new
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+
+    )
+
+    process new (
+        name: New
+        type: clearSessionState
+        execution {
+            sequence: 10
+        }
+        advanced {
+            executionMappingIdentifier: 10770610205294747
+        }
+        serverSideCondition {
+            whenButtonPressed: @clear
+        }
+    )
+
+)
+

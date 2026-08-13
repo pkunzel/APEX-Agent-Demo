@@ -1,0 +1,21 @@
+aiAgent 4-1-sub-agent-customer (
+    name: 4_1 Sub Agent Customer
+    genAI {
+        systemPrompt: Get the Customer Data
+    }
+
+    tool customer-data (
+        name: customer_data
+        type: retrieveData
+        executionPoint: augmentSystemPrompt
+        settings {
+            sqlQuery:
+                ```sql
+                select *
+                from agent_customers
+                ```
+        }
+    )
+
+)
+

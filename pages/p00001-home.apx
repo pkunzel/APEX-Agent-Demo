@@ -15,7 +15,7 @@ page 1 (
     }
 
     region full-agent-app (
-        name: Full Agent App
+        name: APEX Agents
         type: staticContent
         layout {
             sequence: 10
@@ -30,35 +30,35 @@ page 1 (
         }
     )
 
-    button get-weather-forecast (
-        buttonName: GET_WEATHER_FORECAST
-        label: Get Weather Forecast
+    region new (
+        name: New
+        type: list
+        source {
+            list: @navigation-menu
+        }
         layout {
             sequence: 10
             slot: body
         }
         appearance {
-            buttonTemplate: @/text
+            template: @/cards-container
             templateOptions: [
                 #DEFAULT#
-                t-Button--large
-                t-Button--stretch
+                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
             ]
         }
-        behavior {
-            action: triggerAction
+        componentAppearance {
+            listTemplate: @/cards
+            templateOptions: [
+                #DEFAULT#
+                u-colors
+                t-Cards--featured force-fa-lg
+                t-Cards--displayIcons
+                t-Cards--3cols
+                t-Cards--hideBody
+                t-Cards--animColorFill
+            ]
         }
-
-        triggerAction native-open-ai-assistant (
-            action: showAiAssistant
-            genAI {
-                agent: @weather-forecast-agent
-            }
-            execution {
-                sequence: 10
-            }
-        )
-
     )
 
 )

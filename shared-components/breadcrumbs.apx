@@ -15,7 +15,7 @@ breadcrumb breadcrumb (
     )
 
     entry agent-with-client-and-server-siide (
-        name: Agent with Client and Server Siide
+        name: Agent with Client and Server Side
         pageNumber: 4
         execution {
             sequence: 10

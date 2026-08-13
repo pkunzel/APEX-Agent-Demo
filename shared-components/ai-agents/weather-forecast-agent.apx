@@ -78,13 +78,15 @@ aiAgent weather-forecast-agent (
                 
                 const geoLocation = await getGeoLocation();
                 
-                refreshMap(geoLocation);
-                
-                return JSON.stringify({
+                const geoLocationString = JSON.stringify({
                   latitude: geoLocation.coords.latitude,
                   longitude: geoLocation.coords.longitude,
                   accuracy: geoLocation.coords.accuracy
                 });
+                
+                refreshMap(geoLocationString);
+                
+                return geoLocationString;
                 ```
         }
     )
