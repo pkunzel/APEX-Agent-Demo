@@ -1,7 +1,7 @@
-page 3 (
-    name: Agent with 1 Tool
-    alias: AGENT-WITH-1-TOOL
-    title: Agent with 1 Tool
+page 6 (
+    name: APEX access controlled agent
+    alias: APEX-ACCESS-CONTROLLED-AGENT
+    title: APEX access controlled agent
     appearance {
         pageTemplate: @/standard
         templateOptions: #DEFAULT#
@@ -14,29 +14,6 @@ page 3 (
         pageAccessProtection: argumentsMustHaveChecksum
         formAutoComplete: false
     }
-
-    region breadcrumb (
-        name: Breadcrumb
-        type: breadcrumb
-        source {
-            breadcrumb: @breadcrumb
-        }
-        layout {
-            sequence: 10
-            slot: breadcrumbBar
-        }
-        appearance {
-            template: @/title-bar
-            templateOptions: [
-                #DEFAULT#
-                t-BreadcrumbRegion--useBreadcrumbTitle
-            ]
-        }
-        componentAppearance {
-            breadcrumbTemplate: @/breadcrumb
-            templateOptions: #DEFAULT#
-        }
-    )
 
     region conversation (
         name: Conversation
@@ -92,7 +69,7 @@ page 3 (
         action native-open-ai-assistant (
             action: showAiAssistant
             genAI {
-                agent: @2-customer-data-agent
+                agent: @apex-controlled-agent
             }
             appearance {
                 displayAs: inline

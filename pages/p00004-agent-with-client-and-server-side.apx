@@ -13,13 +13,9 @@ page 4 (
     javaScript {
         functionAndGlobalVariableDeclaration:
             ```javascript-browser
-            function refreshMap(geoLocationString) {
-            
-                // Set APEX item
-                apex.item("P4_COORDINATES").setValue(geoLocationString);
-            
+            function refreshMap() {
                 // Parse coordinates
-                const coords = JSON.parse(geoLocationString);
+                const coords = JSON.parse($v("P4_COORDINATES"));
             
                 // Get APEX Map region
                 const mapRegion = apex.region("weather_map");
@@ -69,7 +65,7 @@ page 4 (
     )
 
     region new (
-        name: Map
+        name: Your Location
         type: map
         layout {
             sequence: 60
@@ -145,21 +141,14 @@ page 4 (
     )
 
     pageItem P4_COORDINATES (
-        type: textField
-        label {
-            label: New
-            alignment: left
+        type: hidden
+        settings {
+            valueProtected: false
         }
         layout {
             sequence: 30
             region: @weather-forecast
             slot: regionBody
-            alignment: left
-        }
-        appearance {
-            template: @/optional-floating
-            templateOptions: #DEFAULT#
-            width: 30
         }
     )
 
@@ -174,9 +163,10 @@ page 4 (
             region: @weather-forecast
             slot: regionBody
             alignment: left
+            labelColumnSpan: 0
         }
         appearance {
-            template: @/optional-floating
+            template: @/hidden
             templateOptions: #DEFAULT#
         }
     )
@@ -232,19 +222,26 @@ page 4 (
 
     )
 
-    dynamicAction update-map (
+    dynamicAction update-map_1 (
         name: Update Map
         execution {
-            sequence: 10
+            sequence: 20
         }
         when {
             selectionType: items
-            items: P4_COORDINATES
+            items: P4_WEATHER
         }
-        clientSideCondition {
-            type: itemIsNotNull
-            item: P4_COORDINATES
-        }
+
+        action native-javascript-code (
+            action: executeJsCode
+            settings {
+                jsCode: refreshMap()
+            }
+            execution {
+                sequence: 20
+                fireOnInit: false
+            }
+        )
 
         action native-refresh (
             action: refresh
