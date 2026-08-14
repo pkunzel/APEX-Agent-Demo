@@ -1,4 +1,4 @@
-aiAgent apex-controlled-agent (
+aiAgent 4-apex-controlled-agent (
     name: 4 - APEX Controlled Agent
     genAI {
         systemPrompt: "You are a helpful assistant. "

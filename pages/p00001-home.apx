@@ -51,7 +51,6 @@ page 1 (
             listTemplate: @/cards
             templateOptions: [
                 #DEFAULT#
-                u-colors
                 t-Cards--featured force-fa-lg
                 t-Cards--displayIcons
                 t-Cards--3cols

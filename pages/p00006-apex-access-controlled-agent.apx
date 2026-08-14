@@ -69,7 +69,7 @@ page 6 (
         action native-open-ai-assistant (
             action: showAiAssistant
             genAI {
-                agent: @apex-controlled-agent
+                agent: @4-apex-controlled-agent
             }
             appearance {
                 displayAs: inline

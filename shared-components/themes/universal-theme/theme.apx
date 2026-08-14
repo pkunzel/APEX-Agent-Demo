@@ -3,7 +3,7 @@ theme universal-theme (
     themeNumber: 42
     baseTheme: ut-26.1
     style {
-        currentThemeStyle: @/iris
+        currentThemeStyle: @redwood-demo
     }
     javaScript {
         fileUrls: [
@@ -53,5 +53,25 @@ theme universal-theme (
         filePrefix: #APEX_FILES#themes/theme_42/26.1/
         identifier: UNIVERSAL_THEME
     }
+
+    style redwood-demo (
+        name: RedWood Demo
+        css {
+            fileUrls: [
+                #APEX_FILES#libraries/oracle-fonts/oraclesans-apex#MIN#.css?v=#APEX_VERSION#
+                #THEME_FILES#css/Redwood#MIN#.css?v=#APEX_VERSION#
+            ]
+            cssClasses: " rw-mode-body-header--dark rw-mode-nav--pillar rw-pillar--ocean"
+        }
+        themeRollerAttributes {
+            inputParameterFileUrls: #THEME_FILES#less/theme/Redwood-Theme.less
+            outputCssFileUrl: #THEME_DB_FILES#14808557516805538.css
+            jsonConfig: "{\"classes\":[\"rw-mode-body-header--dark\",\"rw-mode-nav--pillar\",\"rw-pillar--ocean\"],\"vars\":{},\"customCSS\":\"\",\"useCustomLess\":\"N\"}"
+        }
+        advanced {
+            endUserCanPick: true
+        }
+    )
+
 )
 

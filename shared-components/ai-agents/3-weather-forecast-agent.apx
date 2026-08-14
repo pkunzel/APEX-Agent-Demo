@@ -1,4 +1,4 @@
-aiAgent weather-forecast-agent (
+aiAgent 3-weather-forecast-agent (
     name: 3 - Weather Forecast Agent
     genAI {
         systemPrompt:

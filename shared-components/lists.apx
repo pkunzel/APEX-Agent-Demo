@@ -142,7 +142,7 @@ list navigation-menu (
     )
 
     entry apex-access-controlled-agent (
-        label: APEX access controlled agent
+        label: APEX access-controlled agent
         icon {
             imageIconCssClasses: fa-ai-microchip
         }

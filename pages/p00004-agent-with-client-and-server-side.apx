@@ -207,7 +207,7 @@ page 4 (
         triggerAction native-generate-text-ai (
             action: generateTextWithAi
             genAI {
-                agent: @weather-forecast-agent
+                agent: @3-weather-forecast-agent
             }
             inputValue {
                 type: onlySystemPrompt
