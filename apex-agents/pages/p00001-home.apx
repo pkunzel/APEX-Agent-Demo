@@ -41,19 +41,17 @@ page 1 (
             slot: body
         }
         appearance {
-            template: @/cards-container
-            templateOptions: [
-                #DEFAULT#
-                t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
-            ]
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
         }
         componentAppearance {
             listTemplate: @/cards
             templateOptions: [
                 #DEFAULT#
+                u-colors
                 t-Cards--featured force-fa-lg
                 t-Cards--displayIcons
-                t-Cards--3cols
+                t-Cards--5cols
                 t-Cards--hideBody
                 t-Cards--animColorFill
             ]

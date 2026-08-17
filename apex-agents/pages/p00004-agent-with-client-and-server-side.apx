@@ -108,8 +108,7 @@ page 4 (
                         '$'
                         columns (
                             latitude  number path '$.latitude',
-                            longitude number path '$.longitude',
-                            accuracy  number path '$.accuracy'
+                            longitude number path '$.longitude'
                         )
                     ) jt;
                     ```

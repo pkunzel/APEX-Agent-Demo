@@ -1,7 +1,7 @@
 app APEX-AGENTS (
     name: APEX Agents
     genAI {
-        service: @open_ai
+        service: @openai-default
     }
     logo {
         type: text

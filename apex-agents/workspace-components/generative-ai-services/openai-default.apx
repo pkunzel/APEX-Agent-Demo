@@ -1,14 +1,11 @@
-genAIService open_ai (
-    name: Open AI
+genAIService openai-default (
+    name: OpenAI
     provider: openai
     endpointUrl {
         url: https://api.openai.com/v1
     }
     authentication {
-        credentials: @credentials_for_open_ai
-    }
-    additionalData {
-        attributes: { "temperature" : 1 }
+        credentials: @credentials-for-openai-2
     }
     appBuilder {
         usedByAppBuilder: true
